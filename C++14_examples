@@ -1,0 +1,192 @@
+C++14
+
+/***********************************************************************************************
+1. variable templates
+************************************************************************************************/
+
+#include <iostream>
+#include <limits>
+
+using namespace std;
+
+template <typename T>
+constexpr T max_value = std::numeric_limits<T>::max();
+
+int main() {
+    int max_int = max_value<int>;
+    double max_double = max_value<double>;
+    float max_float = max_value<float>;
+    std::cout << max_int << endl;
+    std::cout<<max_double <<endl;
+    std::cout<<max_float <<endl;
+    return 0;
+}
+
+/***********************************************************************************************
+2. generic lambdas
+************************************************************************************************/
+#include <iostream>
+
+int main() {
+    auto sum = [](auto a, auto b) {
+        return a + b;
+    };
+
+    int result1 = sum(2, 3);
+    double result2 = sum(2.5, 3.7);
+
+    std::cout << "Result 1: " << result1 << std::endl;
+    std::cout << "Result 2: " << result2 << std::endl;
+
+    return 0;
+}
+
+
+/***********************************************************************************************
+3. lambda init-capture
+Prior to C++14, you could only capture variables by value or by reference, but there was no way to provide an initializer for the captured variables.
+
+************************************************************************************************/
+#include <iostream>
+
+int main() {
+    int x = 5;
+
+    auto lambda = [y = x + 2]() {
+        std::cout << "Value of y: " << y << std::endl;
+    };
+
+    lambda(); // Prints "Value of y: 7"
+
+    return 0;
+}
+
+
+/***********************************************************************************************
+4. new/delete elision
+************************************************************************************************/
+#include <iostream>
+
+void someFunction() {
+    int* ptr = new int(42);
+    std::cout << "Value: " << *ptr << std::endl;
+    delete ptr;
+}
+
+int main() {
+    someFunction();
+    return 0;
+}
+
+Compiler optimisation :
+
+#include <iostream>
+
+void someFunction() {
+    int value = 42;
+    std::cout << "Value: " << value << std::endl;
+}
+
+int main() {
+    someFunction();
+    return 0;
+}
+
+
+
+/***********************************************************************************************
+4. relaxed restrictions on constexpr functions/Extended CONSTEXPR
+************************************************************************************************/
+
+constexpr int factorial(int n) {
+    int result = 1;
+    for (int i = 1; i <= n; ++i) {
+        result *= i;
+    }
+    return result;
+}
+
+int main() {
+    constexpr int value = factorial(5);  // Computed at compile-time
+    static_assert(value == 120, "Factorial calculation is incorrect");
+    return 0;
+}
+
+
+
+
+
+
+
+/***********************************************************************************************
+5. binary literals
+************************************************************************************************/
+#include <iostream>
+
+int main() {
+    int binaryValue = 0b101010; // Binary literal representing 42
+
+    std::cout << "Binary value: " << binaryValue << std::endl; // Output: 42
+
+    return 0;
+}
+
+
+/***********************************************************************************************
+6. digit separators
+************************************************************************************************/
+#include <iostream>
+
+int main() {
+    int million = 1'000'000;
+    double pi = 3.14'15'93'79;
+
+    std::cout << "One million: " << million << std::endl;
+    std::cout << "Approximation of pi: " << pi << std::endl;
+
+    return 0;
+}
+
+
+/***********************************************************************************************
+7. return type deduction for functions
+************************************************************************************************/
+
+#include <iostream>
+
+auto add(int a, int b) {
+    return a + b;
+}
+
+int main() {
+    auto result = add(5, 3);
+    std::cout << "Result: " << result << std::endl;  // Output: 8
+
+    return 0;
+}
+
+
+
+/***********************************************************************************************
+8. Aggregate classes with default non-static member initialize
+
+************************************************************************************************/
+#include <iostream>
+
+struct Point {
+    int x;
+    int y;
+};
+
+int main() {
+    Point p = {10, 20};
+    std::cout << "Point p: (" << p.x << ", " << p.y << ")" << std::endl;
+
+    return 0;
+}
+
+
+/***********************************************************************************************
+9. aggregate classes with default non-static member initialize
+
+************************************************************************************************/
